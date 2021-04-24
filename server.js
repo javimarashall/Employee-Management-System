@@ -16,3 +16,52 @@ connection.connect((err) => {
     runStart();
 });
 
+const runStart = () => {
+    inquirer
+        .prompt({
+            name: 'action',
+            type: 'rawlist',
+            message:'What would you like to do?',
+            choices: [
+                'View Employees',
+                'View Departments',
+                'View Roles',
+                'Add Employee',
+                'Add Role',
+                'Add Department',
+                'Update Employee Role',
+            ]
+        })
+        .then((answer) => {
+            switch (answer.action) {
+                case 'View Employee':
+                    viewEmployees();
+                    break;
+                
+                case 'View Departments':
+                    viewDepartments();
+                    break;
+
+                case 'View Roles':
+                    viewRoles();
+                    break;
+
+                case 'Add Employee':
+                    addEmployee();
+                    break;
+
+                case 'Add Role':
+                    addRole();
+                    break;
+
+                case 'Add Department':
+                    addDepartment();
+                    break;
+
+                case 'Update Employee Role':
+                    updateEmployeeRole();
+                    break;
+            }
+        });
+};
+
