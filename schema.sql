@@ -7,13 +7,13 @@ USE employee_DB;
 
 --create department table
 CREATE TABLE department (
-    id INT(10) NOT NULL,
+    id INT(10) AUTO_INCREMENT NOT NULL,
     name VARCHAR(30) NOT NULL, --Hold department name
     PRIMARY KEY(id)
 );
 
 CREATE TABLE role(
-    id INT(10) NOT NULL,
+    id INT(10) AUTO_INCREMENT NOT NULL,
     title VARCHAR(30), --hold role title
     salary DECIMAL(10,2), --hold role salary
     department_id INT(10), --to hold reference to department role belongs to
@@ -21,10 +21,10 @@ CREATE TABLE role(
 );
 
 CREATE TABLE employee(
-    id INT(10),
-    first_name VARCHAR(30),
-    last_name VARCHAR(30),
-    role_id INT(10),
-    manager_id INT(10), -- to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
-    PRIMARY KEY(id)
+    id INT(10) AUTO_INCREMENT NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    role_id INT(10) NOT NULL,
+    manager_id INT(10) NOT NULL, -- to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
+    PRIMARY KEY(id) NULL
 );
