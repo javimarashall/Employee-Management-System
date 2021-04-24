@@ -1,0 +1,26 @@
+{
+  "name": "Employee-Management-System",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javimarashall/Employee-Management-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/javimarashall/Employee-Management-System/issues"
+  },
+  "homepage": "https://github.com/javimarashall/Employee-Management-System#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "i": "^0.3.6",
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}
