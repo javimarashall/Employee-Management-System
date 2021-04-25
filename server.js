@@ -67,7 +67,20 @@ const runStart = () => {
 
 const viewEmployees = () => {
     const query = 
-    'SELECT employee.first_name, employee.last_name, employee_role.title FROM employee LEFT JOIN employee_role ON employee.role_id=employee_role.title';
+    `
+    SELECT
+		employee.first_name,
+        employee.last_name,
+        employee_role.title,
+        employee_role.salary,
+        department.name AS department,
+        CONCAT(manager.first_name," ",manager.last_name) AS manager
+    FROM
+		employee 
+	LEFT JOIN employee_role ON employee.role_id = employee_role.id
+    LEFT JOIN department ON employee_role.department_id = department.id
+    LEFT JOIN employee manager ON manager.id = employee.manager_id
+    `;
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -194,5 +207,45 @@ const addDepartment = () => {
     };
 
 const updateEmployeeRole = () => {
+        inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'employeeid',
+                message: "Please enter employee's ID to update role?",
+            },
+            {
+                type: 'input',
+                name: 'roleid',
+                message: "Please enter the role's id?",
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                `UPDATE employee SET role_id = ${answer.roleid} WHERE id = ${answer.employeeid}`,
+               
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewEmployees();
+                })
+        });
+        };
+
+
+//Bonus
+// const deleteProduct = () => {
     
-}
+//     connection.query(
+//       'DELETE FROM products WHERE ?',
+//       {
+//         flavor: 'strawberry',
+//       },
+//       (err, res) => {
+//         if (err) throw err;
+//         console.log(`${res.affectedRows} products deleted!\n`);
+//         // Call readProducts AFTER the DELETE completes
+//         readProducts();
+//       }
+//     );
+//   };
