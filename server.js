@@ -66,7 +66,8 @@ const runStart = () => {
 };
 
 const viewEmployees = () => {
-    const query = 'SELECT * FROM employee';
+    const query = 
+    'SELECT employee.first_name, employee.last_name, employee_role.title FROM employee_role INNER JOIN employee ON employee.role_id=employee_role.title';
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -168,4 +169,27 @@ const addRole = () => {
                 })
         });
 };
+
+const addDepartment = () => {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: "What's the department's name?",
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            'INSERT INTO department SET ?',
+            {
+                name: answer.name,
+            },
+            (err, res) => {
+                if (err) throw err;
+                console.table(res);
+                viewDepartments();
+            })
+    });
+    };
 

@@ -18,6 +18,7 @@ CREATE TABLE employee_role(
     salary DECIMAL(10,2) NOT NULL, -- hold role salary
     department_id INT(10) NOT NULL, -- to hold reference to department role belongs to
     PRIMARY KEY(id)
+    FOREIGN KEY (department_id) REFERENCES department(id),
 );
 
 CREATE TABLE employee(
@@ -27,4 +28,5 @@ CREATE TABLE employee(
     role_id INT(10) NOT NULL,
     manager_id INT(10), -- to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
     PRIMARY KEY(id)
+    FOREIGN KEY (role_id) REFERENCES imployee_role(id),
 );
