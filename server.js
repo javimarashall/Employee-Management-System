@@ -81,7 +81,7 @@ const viewDepartments = () => {
         console.table(res);
         runStart();
 });
-}
+};
 
 const viewRoles = () => {
     const query = 'SELECT * FROM employee_role';
@@ -90,4 +90,82 @@ const viewRoles = () => {
         console.table(res);
         runStart();
     });
-}
+};
+
+const addEmployee = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'first_name',
+                message: "Employee's First Name?",
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: "Employee's Last Name?",
+            },
+            {
+                type: 'input',
+                name: 'role',
+                message: "Employee's role_id?",
+            },
+            {
+                type: 'input',
+                name: 'manager',
+                message: "'Employee's Manager ID?",
+            },            
+        ])
+        .then((answer) => {
+            connection.query(
+                'INSERT INTO employee SET ?',
+                {
+                    first_name: answer.first_name,
+                    last_name: answer.last_name,
+                    role_id: answer.role,
+                    manager_id: answer.manager,
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewEmployees();
+                }
+            )
+        });
+};
+
+const addRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'title',
+                message: "What's the role title?",
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: "What's the role salary?",
+            },
+            {
+                type: 'input',
+                name: 'department',
+                message: "What's the department's id for the role?",
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                'INSERT INTO employee_role SET ?',
+                {
+                    title: answer.title,
+                    salary: answer.salary,
+                    department_id: answer.department,
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewRoles();
+                })
+        });
+};
+
