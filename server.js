@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'password',
-    database: 'employee_DB'
+    database: 'employee_DB',
 });
 
 connection.connect((err) => {
@@ -34,7 +34,7 @@ const runStart = () => {
         })
         .then((answer) => {
             switch (answer.action) {
-                case 'View Employee':
+                case 'View Employees':
                     viewEmployees();
                     break;
                 
@@ -65,3 +65,29 @@ const runStart = () => {
         });
 };
 
+const viewEmployees = () => {
+    const query = 'SELECT * FROM employee';
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        runStart();
+});
+};
+
+const viewDepartments = () => {
+    const query = 'SELECT * FROM department';
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        runStart();
+});
+}
+
+const viewRoles = () => {
+    const query = 'SELECT * FROM employee_role';
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        runStart();
+    });
+}
