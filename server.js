@@ -67,7 +67,7 @@ const runStart = () => {
 
 const viewEmployees = () => {
     const query = 
-    'SELECT employee.first_name, employee.last_name, employee_role.title FROM employee_role INNER JOIN employee ON employee.role_id=employee_role.title';
+    'SELECT employee.first_name, employee.last_name, employee_role.title FROM employee LEFT JOIN employee_role ON employee.role_id=employee_role.title';
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -193,3 +193,6 @@ const addDepartment = () => {
     });
     };
 
+const updateEmployeeRole = () => {
+    
+}
