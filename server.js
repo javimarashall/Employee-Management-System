@@ -70,8 +70,8 @@ const runStart = () => {
                     deleteEmployee();
                     break;
 
-                case 'Delete Roles':
-                    deleteEmployeeRole();
+                case 'Delete Role':
+                    deleteRole();
                     break;
 
                 case 'Delete Department':
@@ -313,7 +313,7 @@ const updateEmployeeManagers = () => {
         ])
         .then((answer) => {
             connection.query(
-                `UPDATE employee_role SET employee.manager_id =${answer.update} WHERE id =${answer.updateManager}`,
+                `UPDATE employee SET employee.manager_id =${answer.update} WHERE id =${answer.updateManager}`,
 
                 (err, res) => {
                     if (err) throw err;
@@ -323,23 +323,23 @@ const updateEmployeeManagers = () => {
         });
 };
 
-const deleteEmployeeRole = () => {
+const deleteRole = () => {
     inquirer
         .prompt([
             {
                 type: 'input',
-                name: 'delete',
-                message: 'Please enter role ID to delete employee.',
+                name: 'role',
+                message: 'Enter role ID to be deleted:',
             },
         ])
         .then((answer) => {
             connection.query(
-                `DELETE FROM employee WHERE id = ${answer.delete}`,
-
+                `DELETE FROM employee_role WHERE id =${answer.role}`,
                 (err, res) => {
                     if (err) throw err;
                     console.table(res);
                     viewRoles();
-                })
-        });
-};
+                }
+            )
+        }
+)}
