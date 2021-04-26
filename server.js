@@ -21,7 +21,7 @@ const runStart = () => {
         .prompt({
             name: 'action',
             type: 'rawlist',
-            message:'What would you like to do?',
+            message: 'What would you like to do?',
             choices: [
                 'View Employees',
                 'View Departments',
@@ -33,6 +33,7 @@ const runStart = () => {
                 'Delete Employee',
                 'Delete Role',
                 'Delete Department',
+                'Update Employee Managers',
             ]
         })
         .then((answer) => {
@@ -40,7 +41,7 @@ const runStart = () => {
                 case 'View Employees':
                     viewEmployees();
                     break;
-                
+
                 case 'View Departments':
                     viewDepartments();
                     break;
@@ -64,25 +65,29 @@ const runStart = () => {
                 case 'Update Employee Role':
                     updateEmployeeRole();
                     break;
-                
+
                 case 'Delete Employee':
                     deleteEmployee();
                     break;
 
                 case 'Delete Roles':
-                    deleteRoles();
+                    deleteEmployeeRole();
                     break;
 
                 case 'Delete Department':
                     deleteDepartment();
+                    break;
+
+                case 'Update Employee Managers':
+                    updateEmployeeManagers();
                     break;
             }
         });
 };
 
 const viewEmployees = () => {
-    const query = 
-    `
+    const query =
+        `
     SELECT
 		employee.id,
         employee.first_name,
@@ -101,7 +106,7 @@ const viewEmployees = () => {
         if (err) throw err;
         console.table(res);
         runStart();
-});
+    });
 };
 
 const viewDepartments = () => {
@@ -110,7 +115,7 @@ const viewDepartments = () => {
         if (err) throw err;
         console.table(res);
         runStart();
-});
+    });
 };
 
 const viewRoles = () => {
@@ -144,7 +149,7 @@ const addEmployee = () => {
                 type: 'input',
                 name: 'manager',
                 message: "'Employee's Manager ID?",
-            },            
+            },
         ])
         .then((answer) => {
             connection.query(
@@ -201,29 +206,29 @@ const addRole = () => {
 
 const addDepartment = () => {
     inquirer
-    .prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: "What's the department's name?",
-        },
-    ])
-    .then((answer) => {
-        connection.query(
-            'INSERT INTO department SET ?',
+        .prompt([
             {
-                name: answer.name,
+                type: 'input',
+                name: 'name',
+                message: "What's the department's name?",
             },
-            (err, res) => {
-                if (err) throw err;
-                console.table(res);
-                viewDepartments();
-            })
-    });
-    };
+        ])
+        .then((answer) => {
+            connection.query(
+                'INSERT INTO department SET ?',
+                {
+                    name: answer.name,
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewDepartments();
+                })
+        });
+};
 
 const updateEmployeeRole = () => {
-        inquirer
+    inquirer
         .prompt([
             {
                 type: 'input',
@@ -239,77 +244,102 @@ const updateEmployeeRole = () => {
         .then((answer) => {
             connection.query(
                 `UPDATE employee SET role_id = ${answer.roleid} WHERE id = ${answer.employeeid}`,
-               
+
                 (err, res) => {
                     if (err) throw err;
                     console.table(res);
                     viewEmployees();
                 })
         });
-        };
+};
 
 
 //Bonus
 
 const deleteDepartment = () => {
     inquirer
-    .prompt([
-        {
-            type: 'input',
-            name: 'delete',
-            message: "Please enter department's ID to update role?",
-        },
-    ])
-    .then((answer) => {
-        connection.query(
-            `DELETE FROM department WHERE id = ${answer.delete}`,
-           
-            (err, res) => {
-                if (err) throw err;
-                console.table(res);
-                viewDepartments();
-            })
-    });
-    };
+        .prompt([
+            {
+                type: 'input',
+                name: 'delete',
+                message: "Please enter department's ID to update role?",
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                `DELETE FROM department WHERE id = ${answer.delete}`,
 
-const deleteRoles = () => {
-    inquirer
-    .prompt([
-        {
-            type: 'input',
-            name: 'delete',
-            message: "Please enter role's ID to delete role.",
-        },
-    ])
-    .then((answer) => {
-        connection.query(
-            `DELETE FROM employee WHERE id = ${answer.delete}`,
-           
-            (err, res) => {
-                if (err) throw err;
-                console.table(res);
-                viewRoles();
-            })
-    });
-    };
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewDepartments();
+                })
+        });
+};
 
 const deleteEmployee = () => {
     inquirer
-    .prompt([
-        {
-            type: 'input',
-            name: 'delete',
-            message: "Please enter employee's ID to delete employee.",
-        },
-    ])
-    .then((answer) => {
-        connection.query(
-            `DELETE FROM employee WHERE id = ${answer.delete}`,
-           
-            (err, res) => {
-                if (err) throw err;
-                console.table(res);
-                viewEmployees();
-            })
-    });
-    };
+        .prompt([
+            {
+                type: 'input',
+                name: 'delete',
+                message: "Please enter employee's ID to delete employee.",
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                `DELETE FROM employee WHERE id = ${answer.delete}`,
+
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewEmployees();
+                })
+        });
+};
+const updateEmployeeManagers = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'updateManager',
+                message: "Please enter employee ID to update manager:",
+            },
+            {
+                type: 'input',
+                name: 'update',
+                message: "Please enter new manager's ID:",
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                `UPDATE employee_role SET employee.manager_id =${answer.update} WHERE id =${answer.updateManager}`,
+
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewEmployees();
+                })
+        });
+};
+
+const deleteEmployeeRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'delete',
+                message: 'Please enter role ID to delete employee.',
+            },
+        ])
+        .then((answer) => {
+            connection.query(
+                `DELETE FROM employee WHERE id = ${answer.delete}`,
+
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    viewRoles();
+                })
+        });
+};
