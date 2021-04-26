@@ -30,6 +30,9 @@ const runStart = () => {
                 'Add Role',
                 'Add Department',
                 'Update Employee Role',
+                'Delete Employee',
+                'Delete Role',
+                'Delete Department',
             ]
         })
         .then((answer) => {
@@ -61,6 +64,18 @@ const runStart = () => {
                 case 'Update Employee Role':
                     updateEmployeeRole();
                     break;
+                
+                case 'Delete Employee':
+                    deleteEmployee();
+                    break;
+
+                case 'Delete Roles':
+                    deleteRoles();
+                    break;
+
+                case 'Delete Department':
+                    deleteDepartment();
+                    break;
             }
         });
 };
@@ -69,7 +84,8 @@ const viewEmployees = () => {
     const query = 
     `
     SELECT
-		employee.first_name,
+		employee.id,
+        employee.first_name,
         employee.last_name,
         employee_role.title,
         employee_role.salary,
@@ -217,7 +233,7 @@ const updateEmployeeRole = () => {
             {
                 type: 'input',
                 name: 'roleid',
-                message: "Please enter the role's id?",
+                message: "Please enter the role's ID?",
             },
         ])
         .then((answer) => {
@@ -234,18 +250,66 @@ const updateEmployeeRole = () => {
 
 
 //Bonus
-// const deleteProduct = () => {
-    
-//     connection.query(
-//       'DELETE FROM products WHERE ?',
-//       {
-//         flavor: 'strawberry',
-//       },
-//       (err, res) => {
-//         if (err) throw err;
-//         console.log(`${res.affectedRows} products deleted!\n`);
-//         // Call readProducts AFTER the DELETE completes
-//         readProducts();
-//       }
-//     );
-//   };
+
+const deleteDepartment = () => {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'delete',
+            message: "Please enter department's ID to update role?",
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            `DELETE FROM department WHERE id = ${answer.delete}`,
+           
+            (err, res) => {
+                if (err) throw err;
+                console.table(res);
+                viewDepartments();
+            })
+    });
+    };
+
+const deleteRoles = () => {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'delete',
+            message: "Please enter role's ID to delete role.",
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            `DELETE FROM employee WHERE id = ${answer.delete}`,
+           
+            (err, res) => {
+                if (err) throw err;
+                console.table(res);
+                viewRoles();
+            })
+    });
+    };
+
+const deleteEmployee = () => {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'delete',
+            message: "Please enter employee's ID to delete employee.",
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            `DELETE FROM employee WHERE id = ${answer.delete}`,
+           
+            (err, res) => {
+                if (err) throw err;
+                console.table(res);
+                viewEmployees();
+            })
+    });
+    };
